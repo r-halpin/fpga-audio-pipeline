@@ -1,0 +1,26 @@
+# === Vivado ===
+*.jou
+*.log
+*.str
+*.opt
+*.pb
+*.runs/
+*.cache/
+*.hw/
+*.ip_user_files/
+*.sim/
+*.webtalk/
+*.xpr~
+*.backup.*
+*.wdb
+*.sysdef
+*.tmp/
+
+# === Python ===
+__pycache__/
+*.pyc
+*.pyo
+*.wav
+*.log
+*.tmp
+
