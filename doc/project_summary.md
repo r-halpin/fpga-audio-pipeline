@@ -14,11 +14,18 @@ Built on a **Basys 3** board, with sampling rates up to **860 SPS**.
 
 ## Hardware
 
-- **FPGA:** Basys3 Artix-7
-- **ADC:** ADS1115 (16-bit, I²C interface)
-- **Microphone:** MAX4466 Electret Microphone with amplifier
+- **FPGA:** Basys3 Artix-7  
+- **ADC:** ADS1115 (16-bit, I²C interface)  
+- **Microphone:** MAX4466 Electret Microphone with amplifier  
 
 The ADC and microphone were connected via breakout boards and wired on a breadboard to allow connection between the sensor and FPGA I/O pins.
+
+---
+
+## System Block Diagram
+
+![System Block Diagram](block_diagram.png)  
+*Overview of the audio acquisition pipeline from microphone to Python interface.*
 
 ---
 
@@ -26,31 +33,33 @@ The ADC and microphone were connected via breakout boards and wired on a breadbo
 
 ### 🔹 I²C Communications Module
 
-- Implements a finite state machine to control communication with the ADS1115 over I²C.
+- Implements a finite state machine to control communication with the ADS1115 over I²C.  
 - Starts by sending an initial **5-byte configuration write** to the ADC  
-  *(see: `docs/i2c_config_write_bytes.png`)*
+  *(shown below)*  
+  ![I2C Config Write Sequence](i2c_config_write_bytes.png)
 - Continues with repeated **conversion read sequences** to acquire ADC samples  
-  *(see: `docs/i2c_read_response_bytes.png`)*
+  *(shown below)*  
+  ![I2C Read Response Bytes](i2c_read_response_bytes.png)
 - For more detail, refer to the **ADS111x datasheet**
 
 ---
 
 ### 🔹 UART Transmission Module
 
-- Sends 16-bit audio samples from the I²C module to the PC over UART.
-- Transmits data in **two 8-bit UART frames** (MSB first)
+- Sends 16-bit audio samples from the I²C module to the PC over UART.  
+- Transmits data in **two 8-bit UART frames** (MSB first)  
 - Each frame follows standard **10-bit UART format**:  
-  `1 start bit`, `8 data bits`, `1 stop bit`
+  `1 start bit`, `8 data bits`, `1 stop bit`  
 - Operates at a configurable **baud rate** (default: **460800**)
 
 ---
 
 ### 🔹 Top Module
 
-- Connects the I²C and UART modules
-- Captures each 16-bit ADC sample
-- Splits and sends the sample via UART in two frames
-- Manages control logic to avoid lost or repeated transmissions
+- Connects the I²C and UART modules  
+- Captures each 16-bit ADC sample  
+- Splits and sends the sample via UART in two frames  
+- Manages control logic to avoid lost or repeated transmissions  
 
 ---
 
@@ -58,13 +67,23 @@ The ADC and microphone were connected via breakout boards and wired on a breadbo
 
 A Python script receives the audio samples over UART and processes them:
 
-- Reads two bytes per sample from the serial port (`/dev/ttyUSB1`)
-- Reconstructs signed 16-bit integers (MSB first)
+- Reads two bytes per sample from the serial port (`/dev/ttyUSB1`)  
+- Reconstructs signed 16-bit integers (MSB first)  
 - Applies basic DSP:
   - Removes **DC offset**
-  - **Normalizes** the waveform
+  - **Normalizes** the waveform  
 - Saves output to `recorded_signal.wav` at **860 Hz**
-- Optional: FFT and waveform plotting for analysis/debugging
+- Optional: FFT and waveform plotting for analysis/debugging  
 
 ---
+
+## Recorded Signal FFT
+
+![FFT of Recorded Signal](fft_100hz_input.png)  
+*FFT of a 100 Hz sine wave recorded through the FPGA–ADC pipeline.  
+The second harmonic at ~200 Hz likely arises from analog distortion or non-ideal waveform generation.*
+
+---
+
+
 
