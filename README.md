@@ -7,7 +7,7 @@ This project implements a real-time audio acquisition and processing pipeline us
 
 ---
 
-## 🔧 Hardware Overview
+## Hardware Overview
 
 - **FPGA Board:** Digilent Basys 3 (100 MHz clock)
 - **ADC:** ADS1015 (12-bit, up to 2400 SPS)
@@ -18,7 +18,7 @@ This project implements a real-time audio acquisition and processing pipeline us
 
 ---
 
-## 🧠 System Architecture
+## System Architecture
 
 ```text
 Mic → ADS1015 → I2C → FPGA → UART → Python → WAV/FFT
