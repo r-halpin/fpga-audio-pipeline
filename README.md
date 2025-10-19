@@ -5,7 +5,6 @@ FPGA-based audio sampling pipeline using the ADS1115 ADC over I²C, with real-ti
 
 This project implements a real-time audio acquisition and processing pipeline using a Digilent Basys 3 FPGA board, the ADS1015 ADC, and Python for data visualization and DSP.
 
----
 
 ## Hardware Overview
 
@@ -16,7 +15,7 @@ This project implements a real-time audio acquisition and processing pipeline us
   - **I²C:** SDA/SCL between FPGA and ADS1015
   - **UART:** 16-bit sample transmission from FPGA to PC
 
----
+
 
 ## System Architecture
 
