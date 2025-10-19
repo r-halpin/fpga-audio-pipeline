@@ -10,7 +10,7 @@ module i2c_comms(
     output wire [3:0] debug_state
 );
 
-    // === Parameters ===
+    // Parameters
     parameter I2C_ADDRESS = 7'b1001000;     // ADS1115 default (0x48)
     parameter CLK_DIVIDER = 499;            // 100 MHz -> ~100 kHz I2C 499
     parameter DELAY_BETWEEN_READS =120;  // Delay cycles between reads 
@@ -22,7 +22,7 @@ module i2c_comms(
     parameter CONFIG_LSB      = 8'b11100011; // 0x83 → DR=100 (128 SPS), COMP disabled
     parameter CONVERSION_PTR  = 8'b00000000; // 0x00 → Conversion register pointer
 
-    // === Internal Registers ===
+    // Internal Registers
     reg [15:0] clk_count;
     reg scl_enable;
     reg [SHIFT_DELAY-1:0] scl_shift;
@@ -53,7 +53,7 @@ module i2c_comms(
     reg scl_delayed_prev;
     wire scl_falling = (scl_delayed_prev == 1 && scl_delayed == 0);
 
-    // === States ===
+    // States
     localparam IDLE          = 4'd0;
     localparam START         = 4'd1;
     localparam SEND_BYTE     = 4'd2;
@@ -75,7 +75,7 @@ module i2c_comms(
         scl_delayed_prev <= scl_delayed;
 end
 
-    // === SCL Clock Generation (Shifted) ===
+    // SCL Clock Generation (Shifted)
     always @(posedge clk or posedge rst) begin
     if (rst) begin
         clk_count  <= 0;
@@ -111,7 +111,7 @@ end
 
     assign scl_delayed = scl_shift[SHIFT_DELAY-1];
 
-    // === Main FSM ===
+    // Main FSM
     always @(posedge scl_enable or posedge rst) begin
         if (rst) begin
             state <= IDLE;
