@@ -83,7 +83,7 @@ end
         scl_shift  <= {SHIFT_DELAY{1'b1}};  // idle high
         stall_scl  <= 0;
     end else begin
-        // 🟢 ALWAYS toggle the FSM clock
+        // Always toggle the FSM clock
         if (clk_count >= CLK_DIVIDER) begin
             clk_count  <= 0;
             if (!stall_scl) begin
@@ -96,7 +96,7 @@ end
             clk_count <= clk_count + 1;
         end
 
-        // 🟢 Only update physical SCL if transfer is active
+        // Only update physical SCL if transfer is active
         if (i2c_active)
             if (!freeze_scl_shift)begin
             scl_shift <= {scl_shift[SHIFT_DELAY-2:0], scl_enable};
@@ -198,38 +198,19 @@ end
                     state <= ACK;
                 end
                 
+                // ====================
 
                 ACK: begin
                     i2c_active <= 1;
                     
 
                 if (!rw_mode) begin
-//                    // === Decide next byte
-//                    if (!config_done) begin
-//                    case (byte_count)
-//                      3: next_tx_byte = CONFIG_REG_PTR; // 0x01
-//                      2: next_tx_byte = CONFIG_MSB;     // 0xC3
-//                      1: next_tx_byte = CONFIG_LSB;     // 0x83
-//                      default: next_tx_byte = 8'h00;
-//                    endcase
-//                  end else begin
-//                    // AFTER config: only write the Conversion Pointer (0x00)
-//                    next_tx_byte = CONVERSION_PTR;      // 0x00
-//                  end
-                    
-//                    tx_byte <= next_tx_byte;
-                    
+                   
                     if (byte_count > 0) begin
-                        byte_count <= byte_count - 1;
+                        byte_count <= byte_count - 1;                
                     
                     
-                    
-         
-        
-                    
-                    
-                   bit_count <= bit_count - 1;
-  //                 bit_count <= 7;
+                    bit_count <= bit_count - 1;
                     sda_drive <= 1; 
                     sda_out <= tx_byte[7];
                     state <= SEND_BYTE;
@@ -252,11 +233,6 @@ end
         end
 
                 // ====================
-//                END_ACK: begin
-//                    sda_drive <= 1;
-//                    sda_out <= 0;
-//                    state <= RESTART;
-//                end
 
                 RESTART: begin
                     freeze_scl_shift <= 1;     // Freeze the delayed clock
@@ -264,20 +240,24 @@ end
                     sda_out   <= 1;
                     state <= RESTART_WAIT;
                 end
+
+                // ====================
                 
                 RESTART_WAIT: begin
                     sda_out <= 0;              // Pull SDA low while SCL (delayed) is highsda_out <= 0; // SDA goes low while SCL is still high (delayed)sda_out <= 0; // Bring SDA low
                     state <= RESTART_RELEASE;    
                      end
+
+                // ====================
                 
                 RESTART_RELEASE: begin
                     freeze_scl_shift <= 0;     // Resume delayed SCL shifting
                     state <= SEND_BYTE;
                     
-                    end
-                    
+                    end                    
 
                 // ====================
+                
                 READ_BYTE: begin
                 i2c_active <= 1;
                 sda_drive <= 0; 
@@ -291,14 +271,16 @@ end
             
                     state <= READ_ACK;
             
-                    // ⬇️ Move to READ_ACK and assign rx_byte into buffer there instead!
+                    // Move to READ_ACK and assign rx_byte into buffer there instead!
                 end else begin
                     bit_count <= bit_count - 1;
                 end
             end
 
+                // ====================
+
                 READ_ACK: begin
-                    // ⬇️ Only now rx_byte has full value - assign it
+                    // ⬇️Only now rx_byte has full value - assign it
                     if (byte_count == 1)
                         read_buffer[15:8] <= rx_byte;
                     else if (byte_count == 0)
@@ -323,6 +305,8 @@ end
                     state <= WAIT;
                 end
 
+                // ====================
+                
                 WAIT: begin
                     sda_drive <= 0;
                     sda_out <= 1;
