@@ -5,7 +5,7 @@
 FPGA-based audio sampling pipeline using the **ADS1115 ADC** over **I²C**, with real-time **UART transmission** to a **Python interface**.  
 Includes:
 - Verilog implementation (I²C, UART, top module)
-- DSP in Python (bias removal, normalization)
+- DSP in Python (bias removal, normalisation)
 - `.wav` export and signal analysis via FFT
 
 Built on a **Basys 3** board, with sampling rates up to **860 SPS**.
@@ -71,7 +71,7 @@ A Python script receives the audio samples over UART and processes them:
 - Reconstructs signed 16-bit integers (MSB first)  
 - Applies basic DSP:
   - Removes **DC offset**
-  - **Normalizes** the waveform  
+  - **Normalises** the waveform  
 - Saves output to `recorded_signal.wav` at **860 Hz**
 - Optional: FFT and waveform plotting for analysis/debugging  
 
