@@ -1,9 +1,9 @@
 # fpga-audio-pipeline
-FPGA-based audio sampling pipeline using the ADS1115 ADC over I²C, with real-time UART transmission to a Python interface. Includes Verilog implementation, DSP in Python (bias removal, normalization), .wav export, and signal analysis via FFT. Built on Basys 3 at up to 860 SPS.
+FPGA-based audio sampling pipeline using the ADS1115 ADC over I²C, with real-time UART transmission to a Python interface. Includes Verilog implementation, DSP in Python (bias removal, normalisation), .wav export, and signal analysis via FFT. Built on Basys 3 at up to 860 SPS.
 
 # FPGA Audio Sampling with ADS1015
 
-This project implements a real-time audio acquisition and processing pipeline using a Digilent Basys 3 FPGA board, the ADS1015 ADC, and Python for data visualization and DSP.
+This project implements a real-time audio acquisition and processing pipeline using a Digilent Basys 3 FPGA board, the ADS1015 ADC, and Python for data visualisation and DSP.
 
 
 ## Hardware Overview
